@@ -71,16 +71,18 @@ ENV CLING_STANDARD_PCH none
 #Other installs
 RUN apt-get update -qq && apt-get install -y -qq\
     nano \
+    gedit \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-#Install hbar
-
+#Setup workdir
 WORKDIR /home/hbar
 RUN mkdir output
-RUN git clone https://gitlab.cern.ch/ASACUSA-CUSP/hbar-g4-gshfs.git
-COPY entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN /usr/local/bin/docker-entrypoint.sh
 
-#ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+#Download hbar sim code hbar
+RUN git clone https://gitlab.cern.ch/ASACUSA-CUSP/hbar-g4-gshfs.git
+
+COPY entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD [ "/bin/bash" ]
