@@ -5,7 +5,6 @@ ARG GEANT_ARCHIVE_URL="https://gitlab.cern.ch/geant4/geant4/-/archive"
 ARG GEANT_VERSION="10.5.1"
 ARG ROOT_BIN="root_v6.13.08.Linux-ubuntu18-x86_64-gcc7.3.tar.gz"
 ARG ROOT_ARCHIVE_URL="https://root.cern/download/"
-ARG branch
 
 #Geant installation
 
@@ -89,10 +88,12 @@ ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 RUN rm skipcache
 
 #Download hbar sim code hbar
+ARG branch
 RUN git clone https://gitlab.cern.ch/ASACUSA-CUSP/hbar-g4-gshfs.git
 WORKDIR /home/hbar/hbar-g4-gshfs
 #If argument --build-arg branch=true is not empty while building image checkout detector branch
-RUN if -n "$branch"; then git checkout detector-upgrade; fi
+RUN if [ "$branch"="true" ] ; then git checkout detector-upgrade; fi
+#RUN git checkout detector-upgrade
 #Copy fields form docker git
 COPY fields /home/hbar/hbar-g4-gshfs/hbar_gshfs_FTF/fields
 
